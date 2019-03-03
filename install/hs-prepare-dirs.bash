@@ -54,6 +54,13 @@ mkdir "$GLOBAL_PROJ_DIR"
 
 echo 'resolver: lts' > "$GLOBAL_STACK_FILE"
 
+echo 'packages: []' >> "$GLOBAL_STACK_FILE"
+    ## This second line in '.../global-project/stack.yaml' was needed
+    ## at the time of writing (February 25th -- March 3rd, 2019)
+    ## to avoid the following error from 'stack ghci' = 'stack repl':
+    ##    Stack looks for packages in the directories configured in the 'packages' and 'extra-deps' fields defined in your stack.yaml
+    ##    The current entry points to ( ... STACK_ROOT_DIR's value here... )/global-project/ but no .cabal or package.yaml file could be found there.
+
 
 generate_bash_config_lines() {
     local DATE="$(date)"
@@ -88,6 +95,10 @@ echo "Haskell Stack changes appended to '$BASHRC_FILE' (hopefully)."
 
 echo
 echo "bash  ...get.haskellstack.org...  -d $STACK_BIN_DIR"
+echo
+echo "Check '$BASHRC_FILE', delete obsolete config lines from previous runs of this script."
+echo
+echo 'Start a new shell for next steps:'
 echo
 echo "Run the following from outside of a project: stack config set resolver lts"
 echo "Check the file '$GLOBAL_STACK_FILE'"
